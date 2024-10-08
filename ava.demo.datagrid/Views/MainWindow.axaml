@@ -1,0 +1,82 @@
+﻿<Window
+    Height="550"
+    Title="MainWindow"
+    Width="500"
+    d:DesignHeight="550"
+    d:DesignWidth="500"
+    mc:Ignorable="d"
+    x:Class="ava.demo.datagrid.Views.MainWindow"
+    x:DataType="vm:MainWindowViewModel"
+    xmlns="https://github.com/avaloniaui"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:vm="clr-namespace:ava.demo.datagrid.ViewModels"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+
+    <Design.DataContext>
+        <vm:MainWindowViewModel />
+    </Design.DataContext>
+
+    <StackPanel
+        Margin="20"
+        Name="Root"
+        Spacing="10">
+        <StackPanel Orientation="Horizontal" Spacing="10">
+            <CheckBox Content="set selected before remove" IsChecked="{Binding SetSelectedBeforeRemove}" />
+            <Button Command="{Binding ResetCommand}" Content="reset" />
+        </StackPanel>
+
+        <Slider
+            Maximum="300"
+            Minimum="0"
+            Value="{Binding DataGridHeight}" />
+
+        <DataGrid
+            BorderBrush="Gray"
+            BorderThickness="1"
+            GridLinesVisibility="All"
+            Height="{Binding DataGridHeight}"
+            ItemsSource="{Binding Items}">
+            <DataGrid.Columns>
+                <DataGridTemplateColumn Header="selected">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <CheckBox
+                                Command="{ReflectionBinding #Root.((vm:MainWindowViewModel)DataContext).ItemSelectCommand}"
+                                CommandParameter="{Binding Id}"
+                                HorizontalAlignment="Center"
+                                IsChecked="{ReflectionBinding IsSelected,
+                                                              Mode=OneWay}"
+                                VerticalAlignment="Center" />
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+
+                <DataGridTextColumn
+                    Binding="{Binding Id}"
+                    Header="id"
+                    IsReadOnly="True" />
+
+            </DataGrid.Columns>
+
+        </DataGrid>
+
+        <ListBox
+            BorderBrush="Gray"
+            BorderThickness="1"
+            Height="{Binding DataGridHeight}"
+            ItemsSource="{Binding Items}">
+            <ListBox.ItemTemplate>
+                <DataTemplate>
+                    <StackPanel Height="15" Orientation="Horizontal">
+                        <CheckBox IsChecked="{Binding IsSelected}" />
+                        <TextBlock Text="{Binding Id}" VerticalAlignment="Center" />
+                    </StackPanel>
+                </DataTemplate>
+
+            </ListBox.ItemTemplate>
+
+        </ListBox>
+
+    </StackPanel>
+</Window>
